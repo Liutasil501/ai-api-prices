@@ -1,0 +1,32 @@
+name: Update prices
+
+# Pull the latest dataset from aiselect.online once a day, after its daily
+# sync has deployed. A commit only happens when a price changed.
+on:
+  schedule:
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download
+        run: |
+          curl -fsS https://aiselect.online/data/ai-api-prices.json -o ai-api-prices.json.new
+          curl -fsS https://aiselect.online/data/ai-api-prices.csv -o ai-api-prices.csv
+          # Sanity check before replacing the committed file.
+          python3 -c "import json,sys; d=json.load(open('ai-api-prices.json.new')); sys.exit(0 if d.get('count',0) > 500 else 1)"
+          mv ai-api-prices.json.new ai-api-prices.json
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ai-api-prices.json ai-api-prices.csv
+          if git diff --cached --quiet; then echo "No price changes."; exit 0; fi
+          git commit -m "Update prices ($(date -u +%Y-%m-%d))"
+          git push

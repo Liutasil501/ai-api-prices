@@ -22,11 +22,12 @@ jobs:
           # Sanity check before replacing the committed file.
           python3 -c "import json,sys; d=json.load(open('ai-api-prices.json.new')); sys.exit(0 if d.get('count',0) > 500 else 1)"
           mv ai-api-prices.json.new ai-api-prices.json
+          python3 scripts/readme.py
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ai-api-prices.json ai-api-prices.csv
+          git add ai-api-prices.json ai-api-prices.csv README.md
           if git diff --cached --quiet; then echo "No price changes."; exit 0; fi
           git commit -m "Update prices ($(date -u +%Y-%m-%d))"
           git push

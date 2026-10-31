@@ -116,7 +116,7 @@ const cheapest = prices.filter((p) => p.model_slug === "claude-sonnet-5-5").sort
 Prices come from open, MIT-licensed datasets ([LiteLLM](https://github.com/BerriAI/litellm), [models.dev](https://github.com/sst/models.dev), [Portkey Models](https://github.com/Portkey-AI/models)) and from pricing pages checked by hand. Before a value is published it has to pass guards:
 
 - it must appear on two consecutive daily runs,
-- large jumps and zero prices are held back for review,
+- a jump above 50% is published only after it holds for seven days, and zero prices and 10x jumps are skipped as dataset errors,
 - every provider is classified by hand (resellers and gateways are not listed as providers),
 - prices billed in euros are converted to US dollars at the European Central Bank's daily rate.
 

@@ -20,11 +20,11 @@ LLMs, image and video generation, speech-to-text, text-to-speech, web search and
 The same open-weight model often costs several times more at one provider than at another, and nobody publishes those prices side by side. This repository does, every day, as plain files you can load into a spreadsheet, a notebook or your own app.
 
 <!-- stats:start -->
-**2,029 prices** for **1,267 models** from **58 providers**, last updated **2026-11-01**.
+**2,060 prices** for **1,280 models** from **58 providers**, last updated **2026-11-02**.
 
 | Category | Prices | Models | Providers |
 |---|---:|---:|---:|
-| LLM / text | 1,710 | 1,030 | 37 |
+| LLM / text | 1,741 | 1,043 | 37 |
 | Image generation | 115 | 79 | 10 |
 | Video generation | 60 | 40 | 9 |
 | Speech-to-text | 10 | 9 | 7 |
@@ -40,16 +40,16 @@ The ten most widely sold models today, from the cheapest to the most expensive p
 <!-- gaps:start -->
 | Model | Providers | Cheapest | Typical | Most expensive | Gap |
 |---|---:|---|---:|---|---:|
-| [gpt-oss-120b](https://aiselect.online/models/gpt-oss-120b) | 18 | W&B Inference (CoreWeave) $0.065 | $0.26 | Cloudflare Workers AI $0.45 | **6.9×** |
-| [GLM-5.2](https://aiselect.online/models/glm-5-2) | 13 | DeepInfra $1.16 | $2.15 | Scaleway $3.04 | **2.6×** |
+| [gpt-oss-120b](https://aiselect.online/models/gpt-oss-120b) | 19 | W&B Inference (CoreWeave) $0.065 | $0.26 | Cloudflare Workers AI $0.45 | **6.9×** |
+| [GLM-5.2](https://aiselect.online/models/glm-5-2) | 14 | DeepInfra $1.16 | $2.15 | Scaleway $3.04 | **2.6×** |
 | [Llama-3.3-70B-Instruct](https://aiselect.online/models/llama3-3-70b-instruct) | 13 | Nebius Token Factory $0.20 | $0.72 | Scaleway $1.01 | **5.1×** |
 | [GLM-5.3](https://aiselect.online/models/glm-5-3) | 12 | DeepInfra $1.68 | $2.15 | Amazon Bedrock $2.58 | **1.5×** |
 | [GLM-5.3-Flash](https://aiselect.online/models/glm-5-3-flash) | 11 | Baseten $0.24 | $0.24 | Z.ai $0.24 | **1.0×** |
 | [DeepSeek V4 Flash 0731](https://aiselect.online/models/deepseek-v4-flash-0731) | 10 | DeepInfra $0.10 | $0.56 | Novita AI $0.66 | **6.3×** |
 | [gpt-oss-20b](https://aiselect.online/models/gpt-oss-20b) | 10 | W&B Inference (CoreWeave) $0.055 | $0.13 | Cloudflare Workers AI $0.23 | **4.1×** |
+| [Kimi K3](https://aiselect.online/models/kimi-k3) | 10 | SiliconFlow $5.40 | $6.00 | Together AI $6.00 | **1.1×** |
 | [Llama-3.1-8B-Instruct](https://aiselect.online/models/llama-3-1-8b-instruct) | 10 | Novita AI $0.028 | $0.10 | W&B Inference (CoreWeave) $0.22 | **8.0×** |
-| [Kimi K3](https://aiselect.online/models/kimi-k3) | 9 | SiliconFlow $5.40 | $6.00 | Together AI $6.00 | **1.1×** |
-| [DeepSeek-R1](https://aiselect.online/models/deepseek-r1) | 8 | SiliconFlow $0.92 | $4.00 | SambaNova $5.50 | **6.0×** |
+| [DeepSeek-V4.1-Flash](https://aiselect.online/models/deepseek-v4-1-flash) | 9 | DeepInfra $0.21 | $0.52 | Together AI $0.52 | **2.5×** |
 
 *Blended list price per 1M tokens (3 input : 1 output), standard tier. The ten models sold by the most providers; typical is the median provider.*
 <!-- gaps:end -->

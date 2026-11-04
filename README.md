@@ -20,7 +20,7 @@ LLMs, image and video generation, speech-to-text, text-to-speech, web search and
 The same open-weight model often costs several times more at one provider than at another, and nobody publishes those prices side by side. This repository does, every day, as plain files you can load into a spreadsheet, a notebook or your own app.
 
 <!-- stats:start -->
-**2,056 prices** for **1,276 models** from **58 providers**, last updated **2026-11-03**.
+**2,056 prices** for **1,276 models** from **58 providers**, last updated **2026-11-04**.
 
 | Category | Prices | Models | Providers |
 |---|---:|---:|---:|
@@ -41,7 +41,7 @@ The ten most widely sold models today, from the cheapest to the most expensive p
 | Model | Providers | Cheapest | Typical | Most expensive | Gap |
 |---|---:|---|---:|---|---:|
 | [gpt-oss-120b](https://aiselect.online/models/gpt-oss-120b) | 19 | W&B Inference (CoreWeave) $0.065 | $0.26 | Cloudflare Workers AI $0.45 | **6.9×** |
-| [GLM-5.2](https://aiselect.online/models/glm-5-2) | 14 | DeepInfra $1.16 | $2.15 | Scaleway $3.06 | **2.6×** |
+| [GLM-5.2](https://aiselect.online/models/glm-5-2) | 14 | DeepInfra $1.16 | $2.15 | Scaleway $3.05 | **2.6×** |
 | [Llama-3.3-70B-Instruct](https://aiselect.online/models/llama3-3-70b-instruct) | 13 | Nebius Token Factory $0.20 | $0.72 | Scaleway $1.01 | **5.1×** |
 | [GLM-5.3](https://aiselect.online/models/glm-5-3) | 12 | DeepInfra $1.68 | $2.15 | Amazon Bedrock $2.58 | **1.5×** |
 | [GLM-5.3-Flash](https://aiselect.online/models/glm-5-3-flash) | 11 | Baseten $0.24 | $0.24 | Z.ai $0.24 | **1.0×** |

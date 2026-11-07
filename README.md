@@ -97,6 +97,36 @@ const cheapest = prices.filter((p) => p.model_slug === "claude-sonnet-5-5").sort
 
 **Price history:** the commit history is the price history. `git log -p ai-api-prices.csv` shows every change since tracking started.
 
+## Ask your AI assistant (MCP server)
+
+This repository is also an [MCP](https://modelcontextprotocol.io) server, so Claude, Cursor or any MCP client can answer "what does gpt-oss-120b cost at each provider?" from today's data. It reads the daily file from aiselect.online (this repository's copy as fallback); no API key, no sign-up. Needs Node.js 18 or newer.
+
+| Tool | Answers |
+|---|---|
+| `find_models` | Which models match "claude sonnet", with each one's cheapest provider |
+| `model_prices` | Every provider of one model, cheapest first, with input, output and cached prices and the pricing page |
+| `estimate_monthly_cost` | Your monthly bill at every provider, for tokens (LLMs) or images, video seconds, audio hours, characters or searches |
+| `compare_models` | Two models side by side on their cheapest price |
+| `cheapest_models` | The cheapest models in a category (LLM, image, video, speech, TTS, search, embeddings) |
+
+**Claude Code**
+
+```bash
+claude mcp add ai-api-prices -- npx -y github:Liutasil501/ai-api-prices
+```
+
+**Claude Desktop, Cursor and other clients** (`claude_desktop_config.json`, `.cursor/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "ai-api-prices": { "command": "npx", "args": ["-y", "github:Liutasil501/ai-api-prices"] }
+  }
+}
+```
+
+Then ask: *"Which provider sells Llama 3.3 70B cheapest, and what would 50M input and 10M output tokens a month cost there?"*
+
 ## Columns
 
 | Column | Meaning |

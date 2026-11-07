@@ -7,7 +7,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { CATEGORIES, UNIT, cheapestModels, findModels, groupModels, monthlyCosts, pageUrl, usd } from "./prices.js";
+import { CATEGORIES, UNIT, cheapestModels, findModels, groupModels, monthlyCosts, pageUrl, providerOffers, usd } from "./prices.js";
 
 const SOURCES = [
   "https://aiselect.online/data/ai-api-prices.json",
@@ -36,6 +36,14 @@ async function load() {
 
 const footer = (updated) => `\nList prices from each provider's pricing page, updated ${updated}. Data: AISelect.online (MIT), https://aiselect.online/open-data`;
 const text = (body) => ({ content: [{ type: "text", text: body }] });
+/** "12 providers" or "1 provider, 12 price variants". */
+function sellers(model) {
+  const count = providerOffers(model).length;
+  const variants = model.offers.length > count ? `, ${model.offers.length} price variants` : "";
+  return `${count} provider${count === 1 ? "" : "s"}${variants}`;
+}
+const withVariant = (offer) => (offer.variant_label ? `${offer.provider} (${offer.variant_label})` : offer.provider);
+
 const categorySchema = z.enum(CATEGORIES).optional().describe("text (LLMs), image, video, transcription, tts, search or embedding");
 
 async function resolve(name, category) {
@@ -60,7 +68,7 @@ server.registerTool("find_models", {
   const data = await load();
   const hits = findModels(data.models, query, category, 10);
   if (!hits.length) return notFound(query, data, category);
-  const lines = hits.map((model) => `- ${model.model} (${model.category}): from ${usd(model.offers[0].price)} ${UNIT[model.category].label} at ${model.offers[0].provider}, ${model.offers.length} provider${model.offers.length === 1 ? "" : "s"}. ${pageUrl(model)}`);
+  const lines = hits.map((model) => `- ${model.model} (${model.category}): from ${usd(model.offers[0].price)} ${UNIT[model.category].label} at ${withVariant(model.offers[0])}, ${sellers(model)}. ${pageUrl(model)}`);
   return text(lines.join("\n") + footer(data.updated));
 });
 
@@ -74,9 +82,12 @@ server.registerTool("model_prices", {
   if (!model) return notFound(name, data, category);
   const rows = model.offers.map((offer, index) => model.category === "text"
     ? `${index + 1}. ${offer.provider}: ${usd(offer.input_usd_per_1m_tokens)} input / ${usd(offer.output_usd_per_1m_tokens)} output per 1M tokens${typeof offer.cached_input_usd_per_1m_tokens === "number" ? `, cached input ${usd(offer.cached_input_usd_per_1m_tokens)}` : ""}${offer.context_tokens ? `, ${offer.context_tokens.toLocaleString("en-US")} context` : ""}. ${offer.source_url}`
-    : `${index + 1}. ${offer.provider}: ${usd(offer.price)} ${UNIT[model.category].label}. ${offer.source_url}`);
-  const spread = model.offers.length > 1 ? ` The most expensive charges ${(model.offers.at(-1).price / model.offers[0].price).toFixed(1)}x the cheapest.` : "";
-  return text(`${model.model} (${model.category}) at ${model.offers.length} provider${model.offers.length === 1 ? "" : "s"}, cheapest first.${spread}\n${rows.join("\n")}\nCompare with your volume: ${pageUrl(model)}${footer(data.updated)}`);
+    : `${index + 1}. ${withVariant(offer)}: ${usd(offer.price)} ${UNIT[model.category].label}. ${offer.source_url}`);
+  // Spread across providers, each at its cheapest variant: sizes and quality levels are not interchangeable.
+  const byProvider = providerOffers(model);
+  const spread = byProvider.length > 1 && byProvider.at(-1).price > byProvider[0].price * 1.005 ? ` Across providers, the most expensive charges ${(byProvider.at(-1).price / byProvider[0].price).toFixed(1)}x the cheapest.` : "";
+  const variants = model.offers.length > byProvider.length ? " Prices differ by size or quality, so compare the variant you need." : "";
+  return text(`${model.model} (${model.category}) at ${sellers(model)}, cheapest first.${spread}${variants}\n${rows.join("\n")}\nCompare with your volume: ${pageUrl(model)}${footer(data.updated)}`);
 });
 
 server.registerTool("estimate_monthly_cost", {
@@ -97,9 +108,11 @@ server.registerTool("estimate_monthly_cost", {
   if (model.category !== "text" && units === undefined) return text(`Give units: ${UNIT[model.category].usage} per month.`);
   const costs = monthlyCosts(model, { input, output, units });
   const usage = model.category === "text" ? `${input ?? 0}M input + ${output ?? 0}M output tokens` : `${units} ${UNIT[model.category].usage}`;
-  const gap = costs.length > 1 ? costs.at(-1).cost - costs[0].cost : 0;
-  const saving = costs.length < 2 ? "" : gap > 0.005 ? `\nCheapest saves ${usd(gap)} a month against the most expensive.` : "\nSame price at every provider.";
-  return text(`${model.model}, ${usage} a month:\n${costs.map((row, index) => `${index + 1}. ${row.provider}: ${usd(row.cost)}`).join("\n")}${saving}\nStandard list prices only; caching, batch and volume discounts are not included. ${pageUrl(model)}${footer(data.updated)}`);
+  // Savings only between providers, each at its cheapest variant.
+  const perProvider = costs.filter((row, index) => costs.findIndex((other) => other.provider === row.provider) === index);
+  const gap = perProvider.length > 1 ? perProvider.at(-1).cost - perProvider[0].cost : 0;
+  const saving = perProvider.length < 2 ? "" : gap > 0.005 ? `\nThe cheapest provider saves ${usd(gap)} a month against the most expensive.` : "\nSame price at every provider.";
+  return text(`${model.model}, ${usage} a month:\n${costs.map((row, index) => `${index + 1}. ${row.provider}${row.variant ? ` (${row.variant})` : ""}: ${usd(row.cost)}`).join("\n")}${saving}\nStandard list prices only; caching, batch and volume discounts are not included. ${pageUrl(model)}${footer(data.updated)}`);
 });
 
 server.registerTool("compare_models", {
@@ -111,7 +124,7 @@ server.registerTool("compare_models", {
   const [{ data, model: a }, { model: b }] = await Promise.all([resolve(nameA, category), resolve(nameB, category)]);
   if (!a) return notFound(nameA, data, category);
   if (!b) return notFound(nameB, data, category);
-  const line = (model) => `- ${model.model}: from ${usd(model.offers[0].price)} ${UNIT[model.category].label} at ${model.offers[0].provider} (${model.offers.length} provider${model.offers.length === 1 ? "" : "s"}). ${pageUrl(model)}`;
+  const line = (model) => `- ${model.model}: from ${usd(model.offers[0].price)} ${UNIT[model.category].label} at ${withVariant(model.offers[0])} (${sellers(model)}). ${pageUrl(model)}`;
   const [cheap, dear] = a.offers[0].price <= b.offers[0].price ? [a, b] : [b, a];
   const ratio = dear.offers[0].price / cheap.offers[0].price;
   const verdict = a.category !== b.category ? "They are different kinds of models, so the prices are not comparable." : ratio < 1.01 ? "Same price at their cheapest providers." : `${cheap.model} is ${ratio.toFixed(1)}x cheaper at its cheapest provider.`;
@@ -127,7 +140,7 @@ server.registerTool("cheapest_models", {
 }, async ({ category, limit }) => {
   const data = await load();
   const list = cheapestModels(data.models, category, limit ?? 10, category === "text" ? 2 : 1);
-  return text(`Cheapest ${category} models ${UNIT[category].label}:\n${list.map((model, index) => `${index + 1}. ${model.model}: ${usd(model.offers[0].price)} at ${model.offers[0].provider}. ${pageUrl(model)}`).join("\n")}${footer(data.updated)}`);
+  return text(`Cheapest ${category} models ${UNIT[category].label}:\n${list.map((model, index) => `${index + 1}. ${model.model}: ${usd(model.offers[0].price)} at ${withVariant(model.offers[0])}. ${pageUrl(model)}`).join("\n")}${footer(data.updated)}`);
 });
 
 await server.connect(new StdioServerTransport());

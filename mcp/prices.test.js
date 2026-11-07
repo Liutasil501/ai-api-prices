@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { cheapestModels, findModels, groupModels, headlinePrice, monthlyCosts, pageUrl, usd } from "./prices.js";
+import { cheapestModels, findModels, groupModels, headlinePrice, monthlyCosts, pageUrl, providerOffers, usd, variantLabel } from "./prices.js";
 
 const rows = [
   { category: "text", model: "gpt-oss-120b", model_slug: "gpt-oss-120b", provider: "W&B Inference", input_usd_per_1m_tokens: 0.03, output_usd_per_1m_tokens: 0.17, source_url: "https://wandb.ai" },
@@ -31,9 +31,23 @@ test("equal prices list the developer first", () => {
   assert.equal(tie.offers[0].provider, "Maker");
 });
 
-test("a host alias of the same model shows once", () => {
+test("a host alias joins its model with its provider, found by either slug", () => {
   const withAlias = groupModels([...rows, { category: "text", model: "Claude Sonnet 5.5", model_slug: "claude-sonnet-5-5-default", provider: "Vertex", input_usd_per_1m_tokens: 2, output_usd_per_1m_tokens: 10 }]);
-  assert.equal(findModels(withAlias, "claude sonnet").length, 1);
+  const hits = findModels(withAlias, "claude sonnet");
+  assert.equal(hits.length, 1);
+  assert.deepEqual(hits[0].offers.map((offer) => offer.provider).sort(), ["Anthropic", "Vertex"]);
+  assert.equal(findModels(withAlias, "claude-sonnet-5-5-default")[0].slug, "claude-sonnet-5-5");
+});
+
+test("price variants of one provider count as one provider", () => {
+  const dalle = groupModels([
+    { category: "image", model: "dall-e-3", model_slug: "dall-e-3", provider: "OpenAI", variant: "quality=standard;width=1024;height=1024", usd_per_image: 0.04 },
+    { category: "image", model: "dall-e-3", model_slug: "dall-e-3", provider: "OpenAI", variant: "quality=hd;width=1792;height=1024", usd_per_image: 0.12 },
+  ])[0];
+  assert.equal(dalle.offers.length, 2);
+  assert.equal(providerOffers(dalle).length, 1);
+  assert.equal(variantLabel("quality=hd;width=1792;height=1024"), "hd, 1792×1024");
+  assert.deepEqual(monthlyCosts(dalle, { units: 1000 }).map((row) => row.variant), ["standard, 1024×1024", "hd, 1792×1024"]);
 });
 
 test("finds the exact model before longer or similar names", () => {

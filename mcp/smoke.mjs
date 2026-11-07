@@ -15,6 +15,10 @@ const calls = [
   ["estimate_monthly_cost", { model: "flux", category: "image", units: 1000 }],
   ["compare_models", { model_a: "gpt-6.1 sol", model_b: "claude opus 5.5" }],
   ["cheapest_models", { category: "search", limit: 3 }],
+  // One provider with size and quality variants, and a host alias with its own provider.
+  ["model_prices", { model: "dall-e-3", category: "image" }],
+  ["estimate_monthly_cost", { model: "dall-e-3", category: "image", units: 1000 }],
+  ["model_prices", { model: "gemini-3-1-flash-lite-preview" }],
   ["model_prices", { model: "zzzz-not-a-model" }],
 ];
 for (const [name, args] of calls) {

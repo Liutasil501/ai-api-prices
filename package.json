@@ -1,0 +1,40 @@
+{
+  "name": "ai-api-prices",
+  "version": "1.0.0",
+  "description": "MCP server and daily dataset of AI API list prices: LLM, image, video, speech, search and embeddings at every provider.",
+  "type": "module",
+  "bin": {
+    "ai-api-prices-mcp": "mcp/server.js"
+  },
+  "files": [
+    "mcp/prices.js",
+    "mcp/server.js"
+  ],
+  "scripts": {
+    "start": "node mcp/server.js",
+    "test": "node --test mcp/prices.test.js",
+    "smoke": "node mcp/smoke.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.6.7"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "llm",
+    "ai",
+    "api",
+    "pricing",
+    "dataset"
+  ],
+  "homepage": "https://aiselect.online/open-data",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Liutasil501/ai-api-prices.git"
+  },
+  "license": "MIT"
+}

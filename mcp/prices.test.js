@@ -48,6 +48,8 @@ test("a name that differs only by a symbol is a different model", () => {
   const plus = findModels(cohere, "command-r-plus-08-2024")[0];
   assert.equal(plus.model, "Command R+");
   assert.equal(monthlyCosts(plus, { input: 1, output: 1 })[0].cost, 12.5);
+  assert.equal(findModels(cohere, "Command R+")[0].model, "Command R+");
+  assert.equal(findModels(cohere, "Command R")[0].model, "Command R");
 });
 
 test("price variants of one provider count as one provider", () => {

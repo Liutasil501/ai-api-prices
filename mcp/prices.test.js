@@ -64,6 +64,11 @@ test("price variants of one provider count as one provider", () => {
 });
 
 test("finds the exact model before longer or similar names", () => {
+  const nemotron = groupModels([
+    { category: "text", model: "nemotron-3-5-lightning", model_slug: "nvidia-nemotron-3-5-lightning-30b-a3b", provider: "W&B Inference", input_usd_per_1m_tokens: 0.1, output_usd_per_1m_tokens: 0.4 },
+    { category: "text", model: "Nemotron 3.5 Lightning 30B A3B", model_slug: "nemotron-3-5-lightning", provider: "Nebius", input_usd_per_1m_tokens: 0.1, output_usd_per_1m_tokens: 0.4 },
+  ]);
+  assert.equal(findModels(nemotron, "nemotron-3-5-lightning")[0].slug, "nemotron-3-5-lightning");
   assert.equal(findModels(models, "gpt-oss-120b")[0].slug, "gpt-oss-120b");
   assert.equal(findModels(models, "claude sonnet")[0].slug, "claude-sonnet-5-5");
   assert.equal(findModels(models, "flux", "text").length, 0);

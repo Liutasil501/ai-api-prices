@@ -99,6 +99,7 @@ export function findModels(models, query, category, limit = 10) {
   const target = compact(query);
   // "Command R+" must win over "Command R": symbols that name another model break exact-match ties.
   const strict = compact(identity(query));
+  const literal = String(query ?? "").trim().toLowerCase();
   if (!words.length) return [];
   return models
     .filter((model) => !category || model.category === category)
@@ -109,8 +110,9 @@ export function findModels(models, query, category, limit = 10) {
       if (!words.every((word) => hay.includes(word) || hay.replace(/ /g, "").includes(word))) return undefined;
       const exact = name === target || slugs.includes(target);
       const strictExact = compact(identity(model.model)) === strict || slugs.includes(strict);
+      const literalSlug = (model.slugs ?? [model.slug]).includes(literal);
       const prefix = name.startsWith(target) || slugs.some((slug) => slug.startsWith(target));
-      const score = (strictExact ? 120 : exact ? 100 : 0) + (prefix ? 30 : 0) + providerOffers(model).length * 2 - name.length * 0.2;
+      const score = (literalSlug ? 200 : strictExact ? 120 : exact ? 100 : 0) + (prefix ? 30 : 0) + providerOffers(model).length * 2 - name.length * 0.2;
       return { model, score };
     })
     .filter(Boolean)

@@ -20,6 +20,8 @@ const KIND_ORDER = { first_party: 0, inference_host: 1, cloud: 2 };
 
 const normalize = (value) => String(value ?? "").toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, " ").trim();
 const compact = (value) => normalize(value).replace(/ /g, "");
+// Identity of a display name for alias merging: symbols that name a different model (the "+" in "Command R+") count.
+const identity = (value) => normalize(String(value ?? "").replace(/\+/g, " plus "));
 
 /** Headline price in USD for one row, or undefined when the row has none. */
 export function headlinePrice(row) {
@@ -60,7 +62,7 @@ export function groupModels(rows) {
   const union = (a, b) => { parent.set(find(a), find(b)); };
   for (const row of priced) {
     const slugKey = `${row.category}:slug:${row.model_slug}`;
-    const nameKey = `${row.category}:name:${normalize(row.model)}`;
+    const nameKey = `${row.category}:name:${identity(row.model)}`;
     for (const key of [slugKey, nameKey]) if (!parent.has(key)) parent.set(key, key);
     union(slugKey, nameKey);
   }

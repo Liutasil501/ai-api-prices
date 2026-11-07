@@ -39,6 +39,17 @@ test("a host alias joins its model with its provider, found by either slug", () 
   assert.equal(findModels(withAlias, "claude-sonnet-5-5-default")[0].slug, "claude-sonnet-5-5");
 });
 
+test("a name that differs only by a symbol is a different model", () => {
+  const cohere = groupModels([
+    { category: "text", model: "Command R", model_slug: "command-r-08-2024", provider: "Cohere", input_usd_per_1m_tokens: 0.15, output_usd_per_1m_tokens: 0.6 },
+    { category: "text", model: "Command R+", model_slug: "command-r-plus-08-2024", provider: "Cohere", input_usd_per_1m_tokens: 2.5, output_usd_per_1m_tokens: 10 },
+  ]);
+  assert.equal(cohere.length, 2);
+  const plus = findModels(cohere, "command-r-plus-08-2024")[0];
+  assert.equal(plus.model, "Command R+");
+  assert.equal(monthlyCosts(plus, { input: 1, output: 1 })[0].cost, 12.5);
+});
+
 test("price variants of one provider count as one provider", () => {
   const dalle = groupModels([
     { category: "image", model: "dall-e-3", model_slug: "dall-e-3", provider: "OpenAI", variant: "quality=standard;width=1024;height=1024", usd_per_image: 0.04 },

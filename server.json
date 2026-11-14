@@ -1,0 +1,24 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Liutasil501/ai-api-prices",
+  "title": "AI API Prices",
+  "description": "Daily AI API list prices across 50+ providers: LLM, image, video, speech, search and embeddings.",
+  "websiteUrl": "https://aiselect.online/open-data",
+  "repository": {
+    "url": "https://github.com/Liutasil501/ai-api-prices",
+    "source": "github"
+  },
+  "version": "1.0.2",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "ai-api-prices",
+      "version": "1.0.2",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

@@ -1,9 +1,11 @@
 {
   "name": "ai-api-prices",
-  "version": "1.0.1",
+  "version": "1.0.2",
+  "mcpName": "io.github.Liutasil501/ai-api-prices",
   "description": "MCP server and daily dataset of AI API list prices: LLM, image, video, speech, search and embeddings at every provider.",
   "type": "module",
   "bin": {
+    "ai-api-prices": "mcp/server.js",
     "ai-api-prices-mcp": "mcp/server.js"
   },
   "files": [
@@ -31,7 +33,11 @@
     "pricing",
     "dataset"
   ],
+  "author": "Martin Schmid <hello@aiselect.online> (https://aiselect.online)",
   "homepage": "https://aiselect.online/open-data",
+  "bugs": {
+    "url": "https://github.com/Liutasil501/ai-api-prices/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Liutasil501/ai-api-prices.git"

@@ -58,7 +58,7 @@ function notFound(name, data, category) {
 }
 
 const server = new McpServer(
-  { name: "ai-api-prices", version: "1.0.1" },
+  { name: "ai-api-prices", version: "1.0.2" },
   {
     instructions:
       "Read-only AI API standard list prices in USD from AISelect.online, updated daily (caching, batch, and volume discounts excluded; providers without published prices are omitted). Use find_models to look up names, model_prices for every provider of one model, estimate_monthly_cost for a monthly workload bill, compare_models for two models side by side, and cheapest_models for category lows.",

@@ -1,0 +1,14 @@
+.git
+.github
+.gitignore
+node_modules
+assets
+scripts
+*.csv
+*.md
+LICENSE
+ai-api-prices.json
+glama.json
+mcp/npx-check.mjs
+mcp/prices.test.js
+mcp/smoke.mjs

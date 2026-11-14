@@ -1,6 +1,6 @@
 {
   "name": "ai-api-prices",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP server and daily dataset of AI API list prices: LLM, image, video, speech, search and embeddings at every provider.",
   "type": "module",
   "bin": {

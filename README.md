@@ -4,12 +4,13 @@
 
 # AI API prices
 
-**A free, daily-updated dataset of AI API list prices across 58 providers.**
+**A free, daily-updated dataset of AI API list prices across AI providers.**
 LLMs, image and video generation, speech-to-text, text-to-speech, web search and embeddings, in one JSON and one CSV file.
 
 [![Updated daily](https://img.shields.io/github/last-commit/Liutasil501/ai-api-prices?label=updated&color=ff5a36)](https://github.com/Liutasil501/ai-api-prices/commits/main)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0d1311)](LICENSE)
 [![Explore on AISelect.online](https://img.shields.io/badge/explore-aiselect.online-2f9e6e)](https://aiselect.online)
+[![ai-api-prices MCP server on Glama](https://glama.ai/mcp/servers/Liutasil501/ai-api-prices/badges/score.svg)](https://glama.ai/mcp/servers/Liutasil501/ai-api-prices)
 
 [**Explore the data**](https://aiselect.online) · [JSON](ai-api-prices.json) · [CSV](ai-api-prices.csv) · [Price changes](https://aiselect.online/changes) · [Methodology](https://aiselect.online/methodology)
 

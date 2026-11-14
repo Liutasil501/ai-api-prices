@@ -44,7 +44,7 @@ function sellers(model) {
 }
 const withVariant = (offer) => (offer.variant_label ? `${offer.provider} (${offer.variant_label})` : offer.provider);
 
-const categorySchema = z.enum(CATEGORIES).optional().describe("text (LLMs), image, video, transcription, tts, search or embedding");
+const categorySchema = z.enum(CATEGORIES).optional().describe("Optional category filter: text (LLMs), image, video, transcription (speech-to-text), tts (text-to-speech), search (web search), or embedding.");
 
 async function resolve(name, category) {
   const data = await load();
@@ -57,12 +57,18 @@ function notFound(name, data, category) {
   return text(`No model matches "${name}".${close.length ? ` Close matches: ${close.map((model) => model.model).join(", ")}.` : ""}`);
 }
 
-const server = new McpServer({ name: "ai-api-prices", version: "1.0.0" });
+const server = new McpServer(
+  { name: "ai-api-prices", version: "1.0.1" },
+  {
+    instructions:
+      "Read-only AI API standard list prices in USD from AISelect.online, updated daily (caching, batch, and volume discounts excluded; providers without published prices are omitted). Use find_models to look up names, model_prices for every provider of one model, estimate_monthly_cost for a monthly workload bill, compare_models for two models side by side, and cheapest_models for category lows.",
+  },
+);
 
 server.registerTool("find_models", {
   title: "Find AI models",
-  description: "Search AI API models by name (LLMs, image, video, speech, embeddings, web search) and get each one's cheapest provider and price.",
-  inputSchema: { query: z.string().describe("Model name or part of it, e.g. \"gpt-oss\", \"claude sonnet\", \"flux\""), category: categorySchema },
+  description: "Search AI API models by name across text (LLMs), image, video, transcription, tts, search, and embedding categories, returning up to 10 matches with each model's cheapest USD price and provider. Exact slug or prefix matches rank first, then widely sold models. Use model_prices to list every provider for a matched model, or cheapest_models to browse lowest prices in a category.",
+  inputSchema: { query: z.string().describe("Model name, slug, or keyword, e.g. \"gpt-oss\", \"claude sonnet\", or \"flux\"."), category: categorySchema },
   annotations: { readOnlyHint: true, openWorldHint: true },
 }, async ({ query, category }) => {
   const data = await load();
@@ -74,8 +80,8 @@ server.registerTool("find_models", {
 
 server.registerTool("model_prices", {
   title: "Prices of one model at every provider",
-  description: "List what one AI model costs at every provider that sells it, cheapest first, with input, output and cached prices for LLMs and a link to each provider's pricing page.",
-  inputSchema: { model: z.string().describe("Model name, e.g. \"gpt-oss-120b\" or \"Claude Sonnet 5.5\""), category: categorySchema },
+  description: "List standard USD list prices for one AI model at every priced provider, ordered cheapest first (including size or quality variants for media). Returns input, output, and cached token prices for text LLMs (unit rate otherwise) plus each provider's pricing page URL; unpriced providers are omitted. Use find_models if unsure of the name, compare_models for two models, or estimate_monthly_cost for a monthly bill.",
+  inputSchema: { model: z.string().describe("Model name or slug (best match is selected), e.g. \"gpt-oss-120b\" or \"Claude Sonnet 5.5\"."), category: categorySchema },
   annotations: { readOnlyHint: true, openWorldHint: true },
 }, async ({ model: name, category }) => {
   const { data, model } = await resolve(name, category);
@@ -92,12 +98,12 @@ server.registerTool("model_prices", {
 
 server.registerTool("estimate_monthly_cost", {
   title: "Estimate a monthly bill",
-  description: "Estimate the monthly cost of a workload for one model at every provider. LLMs take input and output tokens in millions; other categories take one usage number (images, seconds of video, audio hours, million characters, thousand searches, million tokens).",
+  description: "Estimate a monthly workload bill in USD across every priced provider for one model, ordered cheapest first (standard list prices only; excludes caching, batch, and volume discounts; unpriced providers are omitted). For text LLMs pass input_million_tokens and/or output_million_tokens; for all other categories pass units. Use model_prices for raw per-unit rates or compare_models for a two-model headline comparison.",
   inputSchema: {
-    model: z.string().describe("Model name"),
-    input_million_tokens: z.number().nonnegative().optional().describe("LLMs: input tokens per month, in millions"),
-    output_million_tokens: z.number().nonnegative().optional().describe("LLMs: output tokens per month, in millions"),
-    units: z.number().nonnegative().optional().describe("Other categories: monthly usage in the category's unit"),
+    model: z.string().describe("Model name or slug, e.g. \"gpt-oss-120b\" or \"flux\"."),
+    input_million_tokens: z.number().nonnegative().optional().describe("Text LLMs only: monthly input tokens in millions (e.g. 10)."),
+    output_million_tokens: z.number().nonnegative().optional().describe("Text LLMs only: monthly output tokens in millions (e.g. 2)."),
+    units: z.number().nonnegative().optional().describe("Non-LLM categories only: monthly volume in category units (images, video seconds, audio hours, million characters for tts, thousand searches, or million tokens for embedding)."),
     category: categorySchema,
   },
   annotations: { readOnlyHint: true, openWorldHint: true },
@@ -117,8 +123,12 @@ server.registerTool("estimate_monthly_cost", {
 
 server.registerTool("compare_models", {
   title: "Compare two models on price",
-  description: "Compare two AI models by their cheapest provider's price, with how many providers sell each.",
-  inputSchema: { model_a: z.string().describe("First model"), model_b: z.string().describe("Second model"), category: categorySchema },
+  description: "Compare two AI models in USD by each model's cheapest priced provider (3 input : 1 output blended per 1M tokens for text LLMs, unit rate otherwise) and provider counts. Optional category scopes both model lookups; cross-category pairs display both prices without a price ratio. Use model_prices for every provider of one model or cheapest_models for category lows.",
+  inputSchema: {
+    model_a: z.string().describe("First model name or slug, e.g. \"gpt-6.1 sol\"."),
+    model_b: z.string().describe("Second model name or slug, e.g. \"claude opus 5.5\"."),
+    category: categorySchema,
+  },
   annotations: { readOnlyHint: true, openWorldHint: true },
 }, async ({ model_a: nameA, model_b: nameB, category }) => {
   const [{ data, model: a }, { model: b }] = await Promise.all([resolve(nameA, category), resolve(nameB, category)]);
@@ -134,8 +144,11 @@ server.registerTool("compare_models", {
 
 server.registerTool("cheapest_models", {
   title: "Cheapest models in a category",
-  description: "List the cheapest AI models in a category by their cheapest provider. For LLMs only models sold by at least two providers count, so one-off listings do not crowd the list.",
-  inputSchema: { category: z.enum(CATEGORIES).describe("text, image, video, transcription, tts, search or embedding"), limit: z.number().int().min(1).max(25).optional() },
+  description: "List the cheapest AI models in a category in USD ranked by lowest provider price, returning up to limit models (default 10). Only priced models appear; text LLMs require at least two priced providers so one-off listings do not crowd the ranking. Use find_models to search by name or model_prices to inspect every provider for one model.",
+  inputSchema: {
+    category: z.enum(CATEGORIES).describe("Required category: text (LLMs), image, video, transcription (speech-to-text), tts (text-to-speech), search (web search), or embedding."),
+    limit: z.number().int().min(1).max(25).optional().describe("Maximum number of models to return, from 1 to 25 (default 10)."),
+  },
   annotations: { readOnlyHint: true, openWorldHint: true },
 }, async ({ category, limit }) => {
   const data = await load();

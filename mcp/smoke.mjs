@@ -6,7 +6,16 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 
 const client = new Client({ name: "smoke", version: "1.0.0" });
 await client.connect(new StdioClientTransport({ command: process.execPath, args: [new URL("./server.js", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1")] }));
+const instructions = client.getInstructions();
+if (!instructions) throw new Error("Missing server instructions");
 const { tools } = await client.listTools();
+for (const tool of tools) {
+  if (!tool.description) throw new Error(`Missing description on tool ${tool.name}`);
+  for (const [key, prop] of Object.entries(tool.inputSchema?.properties ?? {})) {
+    if (!prop.description) throw new Error(`Missing description on ${tool.name}.${key}`);
+  }
+}
+console.log("instructions:", instructions.slice(0, 72) + "...");
 console.log("tools:", tools.map((tool) => tool.name).join(", "));
 const calls = [
   ["find_models", { query: "claude sonnet" }],

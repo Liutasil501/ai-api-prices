@@ -1,0 +1,71 @@
+{
+  "manifest_version": "0.2",
+  "name": "ai-api-prices",
+  "display_name": "AI API Prices",
+  "version": "1.0.2",
+  "description": "MCP server and daily dataset of AI API list prices: LLM, image, video, speech, search and embeddings at every provider.",
+  "long_description": "Look up standard USD list prices across 50+ AI providers (LLMs, image, video, transcription, text-to-speech, web search, and embeddings), estimate monthly workload bills, compare two models side by side, and browse category lows using daily open data from AISelect.online.",
+  "author": {
+    "name": "Martin Schmid",
+    "email": "hello@aiselect.online",
+    "url": "https://aiselect.online"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Liutasil501/ai-api-prices"
+  },
+  "homepage": "https://aiselect.online/open-data",
+  "documentation": "https://github.com/Liutasil501/ai-api-prices#readme",
+  "support": "https://github.com/Liutasil501/ai-api-prices/issues",
+  "keywords": [
+    "mcp",
+    "ai",
+    "llm",
+    "pricing",
+    "api",
+    "dataset"
+  ],
+  "license": "MIT",
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  },
+  "server": {
+    "type": "node",
+    "entry_point": "mcp/server.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/mcp/server.js"
+      ]
+    }
+  },
+  "tools": [
+    {
+      "name": "find_models",
+      "description": "Search AI API models by name across text, image, video, transcription, tts, search, and embedding categories."
+    },
+    {
+      "name": "model_prices",
+      "description": "List standard USD list prices for one AI model at every priced provider, ordered cheapest first."
+    },
+    {
+      "name": "estimate_monthly_cost",
+      "description": "Estimate a monthly workload bill in USD across every priced provider for one model."
+    },
+    {
+      "name": "compare_models",
+      "description": "Compare two AI models in USD by each model's cheapest priced provider."
+    },
+    {
+      "name": "cheapest_models",
+      "description": "List the cheapest AI models in a category in USD ranked by lowest provider price."
+    }
+  ]
+}

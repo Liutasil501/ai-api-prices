@@ -11,11 +11,10 @@
   "version": "1.0.2",
   "packages": [
     {
-      "registryType": "npm",
-      "registryBaseUrl": "https://registry.npmjs.org",
-      "identifier": "ai-api-prices",
+      "registryType": "mcpb",
+      "identifier": "https://github.com/Liutasil501/ai-api-prices/releases/download/v1.0.2/ai-api-prices-mcp.mcpb",
       "version": "1.0.2",
-      "runtimeHint": "npx",
+      "fileSha256": "46ff0d56bc125e28b914ad1e3d8543f23a2074962b85ede0498a509ddbe74599",
       "transport": {
         "type": "stdio"
       }

@@ -21,12 +21,12 @@ LLMs, image and video generation, speech-to-text, text-to-speech, web search and
 The same open-weight model often costs several times more at one provider than at another, and nobody publishes those prices side by side. This repository does, every day, as plain files you can load into a spreadsheet, a notebook or your own app.
 
 <!-- stats:start -->
-**3,019 prices** for **1,955 models** from **59 providers**, last updated **2026-11-15**.
+**3,018 prices** for **1,957 models** from **59 providers**, last updated **2026-11-16**.
 
 | Category | Prices | Models | Providers |
 |---|---:|---:|---:|
-| LLM / text | 1,865 | 965 | 39 |
-| Image generation | 644 | 562 | 11 |
+| LLM / text | 1,862 | 965 | 39 |
+| Image generation | 646 | 564 | 11 |
 | Video generation | 354 | 299 | 10 |
 | Speech-to-text | 10 | 9 | 7 |
 | Text-to-speech | 44 | 42 | 9 |
@@ -46,11 +46,11 @@ The ten most widely sold models today, from the cheapest to the most expensive p
 | [GLM-5.3](https://aiselect.online/models/glm-5-3) | 15 | GMI Cloud $1.07 | $2.15 | Amazon Bedrock $2.58 | **2.4×** |
 | [Llama-3.3-70B-Instruct](https://aiselect.online/models/llama3-3-70b-instruct) | 15 | Nebius Token Factory $0.20 | $0.72 | Scaleway $0.99 | **5.0×** |
 | [DeepSeek V4.1 Flash 1017](https://aiselect.online/models/deepseek-v4-1-flash-1017) | 13 | DeepInfra $0.21 | $0.52 | Databricks $0.53 | **2.5×** |
-| [GLM-5.3-Flash](https://aiselect.online/models/glm-5-3-flash) | 13 | GMI Cloud $0.12 | $0.24 | Databricks $0.24 | **2.0×** |
+| [GLM-5.3-Flash](https://aiselect.online/models/glm-5-3-flash) | 12 | GMI Cloud $0.12 | $0.24 | Databricks $0.24 | **2.0×** |
 | [gpt-oss-20b](https://aiselect.online/models/gpt-oss-20b) | 12 | W&B Inference (CoreWeave) $0.055 | $0.13 | Cloudflare Workers AI $0.23 | **4.1×** |
 | [Kimi K3](https://aiselect.online/models/kimi-k3) | 12 | SiliconFlow $5.40 | $6.00 | Together AI $6.00 | **1.1×** |
 | [DeepSeek-V4.1-Flash](https://aiselect.online/models/deepseek-v4-1-flash) | 11 | DeepInfra $0.21 | $0.52 | Databricks $0.53 | **2.5×** |
-| [DeepSeek V4 Flash 0731](https://aiselect.online/models/deepseek-v4-flash-0731) | 11 | DeepInfra $0.090 | $0.43 | Novita AI $0.66 | **7.3×** |
+| [Llama-3.1-8B-Instruct](https://aiselect.online/models/llama-3-1-8b-instruct) | 11 | Novita AI $0.028 | $0.10 | Databricks $0.23 | **8.2×** |
 
 *Blended list price per 1M tokens (3 input : 1 output), standard tier. The ten models sold by the most providers; typical is the median provider.*
 <!-- gaps:end -->

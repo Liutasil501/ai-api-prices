@@ -21,13 +21,13 @@ LLMs, image and video generation, speech-to-text, text-to-speech, web search and
 The same open-weight model often costs several times more at one provider than at another, and nobody publishes those prices side by side. This repository does, every day, as plain files you can load into a spreadsheet, a notebook or your own app.
 
 <!-- stats:start -->
-**3,018 prices** for **1,957 models** from **59 providers**, last updated **2026-11-16**.
+**3,018 prices** for **1,958 models** from **59 providers**, last updated **2026-11-17**.
 
 | Category | Prices | Models | Providers |
 |---|---:|---:|---:|
-| LLM / text | 1,862 | 965 | 39 |
+| LLM / text | 1,861 | 965 | 39 |
 | Image generation | 646 | 564 | 11 |
-| Video generation | 354 | 299 | 10 |
+| Video generation | 355 | 300 | 10 |
 | Speech-to-text | 10 | 9 | 7 |
 | Text-to-speech | 44 | 42 | 9 |
 | Web search | 20 | 7 | 14 |

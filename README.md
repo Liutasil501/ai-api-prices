@@ -21,17 +21,17 @@ LLMs, image and video generation, speech-to-text, text-to-speech, web search and
 The same open-weight model often costs several times more at one provider than at another, and nobody publishes those prices side by side. This repository does, every day, as plain files you can load into a spreadsheet, a notebook or your own app.
 
 <!-- stats:start -->
-**3,104 prices** for **2,025 models** from **59 providers**, last updated **2026-11-25**.
+**3,117 prices** for **2,032 models** from **59 providers**, last updated **2026-11-26**.
 
 | Category | Prices | Models | Providers |
 |---|---:|---:|---:|
-| LLM / text | 1,891 | 979 | 39 |
-| Image generation | 687 | 599 | 12 |
+| LLM / text | 1,904 | 986 | 39 |
+| Image generation | 689 | 601 | 12 |
 | Video generation | 365 | 313 | 10 |
 | Speech-to-text | 10 | 9 | 7 |
 | Text-to-speech | 49 | 47 | 10 |
 | Web search | 20 | 7 | 14 |
-| Embeddings | 82 | 71 | 16 |
+| Embeddings | 80 | 69 | 16 |
 <!-- stats:end -->
 
 ## Same model, very different price
@@ -43,13 +43,13 @@ The ten most widely sold models today, from the cheapest to the most expensive p
 |---|---:|---|---:|---|---:|
 | [gpt-oss-120b](https://aiselect.online/models/gpt-oss-120b) | 20 | W&B Inference (CoreWeave) $0.065 | $0.26 | Cloudflare Workers AI $0.45 | **6.9×** |
 | [GLM-5.3](https://aiselect.online/models/glm-5-3) | 15 | GMI Cloud $1.07 | $2.15 | Amazon Bedrock $2.58 | **2.4×** |
-| [Llama-3.3-70B-Instruct](https://aiselect.online/models/llama3-3-70b-instruct) | 15 | Nebius Token Factory $0.20 | $0.72 | Scaleway $0.98 | **5.0×** |
+| [Llama-3.3-70B-Instruct](https://aiselect.online/models/llama3-3-70b-instruct) | 15 | Nebius Token Factory $0.20 | $0.72 | Scaleway $0.99 | **5.0×** |
 | [GLM-5.2](https://aiselect.online/models/glm-5-2) | 14 | W&B Inference (CoreWeave) $1.07 | $2.15 | Z.ai $2.15 | **2.0×** |
 | [DeepSeek V4.1 Flash 1017](https://aiselect.online/models/deepseek-v4-1-flash-1017) | 13 | DeepInfra $0.21 | $0.52 | Databricks $0.53 | **2.5×** |
 | [GLM-5.3-Flash](https://aiselect.online/models/glm-5-3-flash) | 12 | GMI Cloud $0.12 | $0.24 | Databricks $0.24 | **2.0×** |
 | [gpt-oss-20b](https://aiselect.online/models/gpt-oss-20b) | 12 | W&B Inference (CoreWeave) $0.055 | $0.13 | Cloudflare Workers AI $0.23 | **4.1×** |
 | [Kimi K3](https://aiselect.online/models/kimi-k3) | 12 | SiliconFlow $5.40 | $6.00 | Together AI $6.00 | **1.1×** |
-| [DeepSeek-V4.1-Flash](https://aiselect.online/models/deepseek-v4-1-flash) | 11 | DeepInfra $0.21 | $0.52 | Databricks $0.53 | **2.5×** |
+| [Kimi K3.1 Pro](https://aiselect.online/models/kimi-k3-1-pro) | 11 | Databricks $4.00 | $4.00 | Microsoft Azure AI Foundry $4.60 | **1.2×** |
 | [Llama-3.1-8B-Instruct](https://aiselect.online/models/llama-3-1-8b-instruct) | 11 | Novita AI $0.028 | $0.10 | Databricks $0.23 | **8.2×** |
 
 *Blended list price per 1M tokens (3 input : 1 output), standard tier. The ten models sold by the most providers; typical is the median provider.*
